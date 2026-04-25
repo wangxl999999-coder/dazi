@@ -209,6 +209,9 @@ class Game {
             this.onUpdate(this.getGameData());
         }
 
+        // 高亮第一个目标按键
+        this.highlightNextTarget();
+
         // 播放开始音效
         audioManager.playGameStart();
     }
@@ -239,6 +242,9 @@ class Game {
         if (this.onUpdate) {
             this.onUpdate(this.getGameData());
         }
+
+        // 恢复时重新高亮目标按键
+        this.highlightNextTarget();
 
         audioManager.playResume();
     }
@@ -306,6 +312,9 @@ class Game {
             this.targetText = this.generateTarget();
             this.currentIndex = 0;
             this.inputText = '';
+            
+            // 高亮新目标的第一个按键
+            this.highlightNextTarget();
         }
 
         // 触发更新回调

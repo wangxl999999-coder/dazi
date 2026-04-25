@@ -5,6 +5,10 @@ class KeyboardManager {
         this.currentKey = null;
         this.keyListeners = [];
         this.isListening = false;
+        
+        // 绑定上下文，确保事件监听器可以正确移除
+        this.boundHandleKeyDown = this.handlePhysicalKeyDown.bind(this);
+        this.boundHandleKeyUp = this.handlePhysicalKeyUp.bind(this);
     }
 
     // 初始化虚拟键盘
@@ -90,8 +94,8 @@ class KeyboardManager {
         if (this.isListening) return;
         
         this.isListening = true;
-        document.addEventListener('keydown', this.handlePhysicalKeyDown.bind(this));
-        document.addEventListener('keyup', this.handlePhysicalKeyUp.bind(this));
+        document.addEventListener('keydown', this.boundHandleKeyDown);
+        document.addEventListener('keyup', this.boundHandleKeyUp);
     }
 
     // 停止监听物理键盘
@@ -99,8 +103,8 @@ class KeyboardManager {
         if (!this.isListening) return;
         
         this.isListening = false;
-        document.removeEventListener('keydown', this.handlePhysicalKeyDown.bind(this));
-        document.removeEventListener('keyup', this.handlePhysicalKeyUp.bind(this));
+        document.removeEventListener('keydown', this.boundHandleKeyDown);
+        document.removeEventListener('keyup', this.boundHandleKeyUp);
     }
 
     // 处理物理键盘按下
