@@ -53,14 +53,21 @@ function initApp() {
     // 初始化统计页面
     statsManager.updateStatsUI();
     
-    // 添加粒子背景效果
-    createParticles();
+    // 添加全局点击事件来初始化音效（Web Audio API需要用户交互）
+    document.addEventListener('click', initAudioOnUserInteraction, { once: true });
+}
+
+// 在用户第一次点击时初始化音效
+function initAudioOnUserInteraction() {
+    audioManager.init();
+    audioManager.playTone(440, 0.1, 'sine', 0.1);
 }
 
 // 绑定导航事件
 function bindNavigationEvents() {
     DOM.navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+            audioManager.playNavClick();
             const section = btn.dataset.section;
             showSection(section);
         });
@@ -68,18 +75,40 @@ function bindNavigationEvents() {
 
     // 开始游戏按钮
     if (DOM.startGameBtn) {
-        DOM.startGameBtn.addEventListener('click', startGame);
+        DOM.startGameBtn.addEventListener('click', () => {
+            audioManager.playClick();
+            startGame();
+        });
     }
 
     // 练习类型切换
     if (DOM.practiceType) {
-        DOM.practiceType.addEventListener('change', handlePracticeTypeChange);
+        DOM.practiceType.addEventListener('change', () => {
+            audioManager.playClick();
+            handlePracticeTypeChange();
+        });
     }
 
     // 难度切换
     if (DOM.difficultyLevel) {
-        DOM.difficultyLevel.addEventListener('change', handleDifficultyChange);
+        DOM.difficultyLevel.addEventListener('change', () => {
+            audioManager.playClick();
+            handleDifficultyChange();
+        });
     }
+
+    // 为所有按钮添加点击音效
+    bindAllButtonsSound();
+}
+
+// 为所有按钮添加点击音效
+function bindAllButtonsSound() {
+    const buttons = document.querySelectorAll('button:not(.nav-btn):not(.start-game-btn)');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            audioManager.playClick();
+        });
+    });
 }
 
 // 显示指定页面
@@ -296,6 +325,19 @@ function handleGameEnd(gameData, success) {
     const config = CONFIG.difficulty[gameData.difficulty];
     const passed = stats.accuracy >= config.accuracy;
 
+    // 播放结束音效（延迟一点，让game.js中的音效先播放完）
+    setTimeout(() => {
+        if (passed && stats.score > 0) {
+            audioManager.playSuccess();
+        } else if (stats.score > 0) {
+            // 有分数但没通过，播放中性音效
+            audioManager.playClick();
+        } else {
+            // 没有分数，可能是退出或失败
+            audioManager.playError();
+        }
+    }, 500);
+
     // 更新结果显示
     if (DOM.resultTitle) {
         if (passed && stats.score > 0) {
@@ -392,28 +434,7 @@ function showToast(message, duration = 2000) {
     }, duration);
 }
 
-// 创建粒子背景效果
-function createParticles() {
-    const particleCount = 20;
-    const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c'];
-    
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.cssText = `
-            width: ${Utils.random(5, 15)}px;
-            height: ${Utils.random(5, 15)}px;
-            background: ${colors[Utils.random(0, colors.length - 1)]};
-            border-radius: 50%;
-            left: ${Utils.random(0, 100)}%;
-            top: ${Utils.random(0, 100)}%;
-            animation-delay: ${Utils.random(0, 3)}s;
-            animation-duration: ${Utils.random(3, 6)}s;
-            opacity: ${Utils.random(0.1, 0.3) / 10};
-        `;
-        document.body.appendChild(particle);
-    }
-}
+
 
 // 键盘快捷键处理
 document.addEventListener('keydown', (e) => {
