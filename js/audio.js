@@ -139,6 +139,47 @@ class AudioManager {
         this.playTone(523.25, 0.15, 'sine', this.volume * 0.5);
     }
 
+    // 按钮点击音效（轻柔的提示音）
+    playClick() {
+        this.init();
+        this.playTone(800, 0.08, 'sine', this.volume * 0.4);
+    }
+
+    // 成功/确认音效
+    playSuccess() {
+        this.init();
+        const notes = [523.25, 659.25, 783.99];  // C5, E5, G5
+        notes.forEach((freq, i) => {
+            setTimeout(() => {
+                this.playTone(freq, 0.25, 'sine');
+            }, i * 100);
+        });
+    }
+
+    // 失败/错误音效
+    playError() {
+        this.init();
+        this.playTone(200, 0.2, 'sawtooth', this.volume * 0.6);
+        setTimeout(() => {
+            this.playTone(150, 0.3, 'sawtooth', this.volume * 0.5);
+        }, 100);
+    }
+
+    // 导航切换音效
+    playNavClick() {
+        this.init();
+        this.playTone(600, 0.06, 'triangle', this.volume * 0.3);
+    }
+
+    // 警告音效
+    playWarning() {
+        this.init();
+        this.playTone(440, 0.1, 'square', this.volume * 0.4);
+        setTimeout(() => {
+            this.playTone(440, 0.1, 'square', this.volume * 0.4);
+        }, 150);
+    }
+
     // 切换音效开关
     toggle() {
         this.enabled = !this.enabled;
