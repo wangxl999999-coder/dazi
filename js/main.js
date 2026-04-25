@@ -1,45 +1,52 @@
 // 主入口文件 - 控制整个应用的交互
 
-// DOM 元素缓存
-const DOM = {
-    sections: document.querySelectorAll('.section'),
-    navButtons: document.querySelectorAll('.nav-btn'),
-    practiceType: document.getElementById('practice-type'),
-    difficultyLevel: document.getElementById('difficulty-level'),
-    gamePanel: document.getElementById('game-panel'),
-    resultPanel: document.getElementById('result-panel'),
-    settingsPanel: null,
-    startGameBtn: document.querySelector('.start-game-btn'),
-    pauseBtn: document.getElementById('pause-btn'),
-    
-    // 游戏统计显示元素
-    timer: document.getElementById('timer'),
-    score: document.getElementById('score'),
-    correctCount: document.getElementById('correct-count'),
-    wrongCount: document.getElementById('wrong-count'),
-    accuracy: document.getElementById('accuracy'),
-    speed: document.getElementById('speed'),
-    
-    // 目标显示
-    targetHint: document.getElementById('target-hint'),
-    targetText: document.getElementById('target-text'),
-    inputDisplay: document.getElementById('input-display'),
-    
-    // 结果显示
-    resultTitle: document.getElementById('result-title'),
-    finalScore: document.getElementById('final-score'),
-    finalSpeed: document.getElementById('final-speed'),
-    finalAccuracy: document.getElementById('final-accuracy'),
-    finalCorrect: document.getElementById('final-correct'),
-    finalWrong: document.getElementById('final-wrong'),
-    resultMessage: document.getElementById('result-message')
-};
+// DOM 元素引用（在DOM加载完成后获取）
+let DOM = {};
 
 // 当前状态
 let currentSection = 'home';
 
+// 初始化DOM引用
+function initDOMReferences() {
+    DOM = {
+        sections: document.querySelectorAll('.section'),
+        navButtons: document.querySelectorAll('.nav-btn'),
+        practiceType: document.getElementById('practice-type'),
+        difficultyLevel: document.getElementById('difficulty-level'),
+        gamePanel: document.getElementById('game-panel'),
+        resultPanel: document.getElementById('result-panel'),
+        startGameBtn: document.querySelector('.start-game-btn'),
+        pauseBtn: document.getElementById('pause-btn'),
+        
+        // 游戏统计显示元素
+        timer: document.getElementById('timer'),
+        score: document.getElementById('score'),
+        correctCount: document.getElementById('correct-count'),
+        wrongCount: document.getElementById('wrong-count'),
+        accuracy: document.getElementById('accuracy'),
+        speed: document.getElementById('speed'),
+        
+        // 目标显示
+        targetHint: document.getElementById('target-hint'),
+        targetText: document.getElementById('target-text'),
+        inputDisplay: document.getElementById('input-display'),
+        
+        // 结果显示
+        resultTitle: document.getElementById('result-title'),
+        finalScore: document.getElementById('final-score'),
+        finalSpeed: document.getElementById('final-speed'),
+        finalAccuracy: document.getElementById('final-accuracy'),
+        finalCorrect: document.getElementById('final-correct'),
+        finalWrong: document.getElementById('final-wrong'),
+        resultMessage: document.getElementById('result-message')
+    };
+}
+
 // 初始化应用
 function initApp() {
+    // 初始化DOM引用
+    initDOMReferences();
+    
     // 绑定导航事件
     bindNavigationEvents();
     
@@ -60,11 +67,12 @@ function initApp() {
 // 在用户第一次点击时初始化音效
 function initAudioOnUserInteraction() {
     audioManager.init();
-    audioManager.playTone(440, 0.1, 'sine', 0.1);
+    audioManager.playTone(600, 0.05, 'sine', 0.1);
 }
 
 // 绑定导航事件
 function bindNavigationEvents() {
+    // 导航按钮
     DOM.navButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             audioManager.playNavClick();
@@ -96,19 +104,6 @@ function bindNavigationEvents() {
             handleDifficultyChange();
         });
     }
-
-    // 为所有按钮添加点击音效
-    bindAllButtonsSound();
-}
-
-// 为所有按钮添加点击音效
-function bindAllButtonsSound() {
-    const buttons = document.querySelectorAll('button:not(.nav-btn):not(.start-game-btn)');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            audioManager.playClick();
-        });
-    });
 }
 
 // 显示指定页面
@@ -148,11 +143,8 @@ function handlePracticeTypeChange() {
 
 // 处理难度切换
 function handleDifficultyChange() {
-    // 可以在这里添加难度变化的视觉反馈
     const level = parseInt(DOM.difficultyLevel.value);
     const config = CONFIG.difficulty[level];
-    
-    // 显示难度提示
     showToast(`已选择：${config.name} (${config.description})`);
 }
 
@@ -179,9 +171,6 @@ function startGame() {
     keyboardManager.updateKeyLabels(practiceType);
     keyboardManager.toggleVirtualKeyboard(true);
 
-    // 开始游戏
-    game.start();
-
     // 更新提示文本
     if (DOM.targetHint) {
         if (practiceType === 'wubi') {
@@ -190,10 +179,15 @@ function startGame() {
             DOM.targetHint.textContent = '请输入以下字符：';
         }
     }
+
+    // 开始游戏
+    game.start();
 }
 
 // 暂停/继续游戏
 function togglePause() {
+    audioManager.playClick();
+    
     if (game.state === GAME_STATE.PLAYING) {
         game.pause();
         showPauseOverlay();
@@ -205,7 +199,19 @@ function togglePause() {
 
 // 重新开始游戏
 function restartGame() {
-    game.restart();
+    audioManager.playClick();
+    
+    // 隐藏暂停遮罩
+    hidePauseOverlay();
+    
+    // 结束当前游戏
+    if (game.state !== GAME_STATE.IDLE && game.state !== GAME_STATE.ENDED) {
+        game.end(false);
+    }
+    
+    // 重置游戏状态
+    game.state = GAME_STATE.IDLE;
+    game.resetStats();
     
     // 隐藏结果面板
     if (DOM.resultPanel) {
@@ -216,12 +222,20 @@ function restartGame() {
     }
 
     // 开始新游戏
-    game.start();
+    startGame();
 }
 
 // 退出游戏
 function quitGame() {
-    game.end(false);
+    audioManager.playClick();
+    
+    // 隐藏暂停遮罩
+    hidePauseOverlay();
+    
+    // 结束游戏
+    if (game.state !== GAME_STATE.IDLE && game.state !== GAME_STATE.ENDED) {
+        game.end(false);
+    }
     
     // 隐藏游戏面板
     if (DOM.gamePanel) {
@@ -235,6 +249,9 @@ function quitGame() {
     keyboardManager.stopListening();
     keyboardManager.clearHighlights();
     keyboardManager.toggleVirtualKeyboard(false);
+    
+    // 返回首页
+    showSection('home');
 }
 
 // 处理游戏更新
@@ -245,6 +262,9 @@ function handleGameUpdate(gameData) {
         // 时间警告
         if (gameData.timeRemaining <= 10) {
             DOM.timer.style.color = '#f44336';
+            if (gameData.timeRemaining <= 5 && gameData.timeRemaining > 0) {
+                audioManager.playWarning();
+            }
         } else {
             DOM.timer.style.color = '';
         }
@@ -312,6 +332,9 @@ function updateInputDisplay(gameData) {
 
 // 处理游戏结束
 function handleGameEnd(gameData, success) {
+    // 隐藏暂停遮罩
+    hidePauseOverlay();
+    
     // 隐藏游戏面板，显示结果面板
     if (DOM.gamePanel) {
         DOM.gamePanel.style.display = 'none';
@@ -383,6 +406,9 @@ function handleGameEnd(gameData, success) {
 
 // 显示暂停遮罩
 function showPauseOverlay() {
+    // 先移除已存在的遮罩
+    hidePauseOverlay();
+    
     const overlay = document.createElement('div');
     overlay.className = 'pause-overlay';
     overlay.id = 'pause-overlay';
@@ -410,19 +436,27 @@ function hidePauseOverlay() {
 
 // 显示提示消息
 function showToast(message, duration = 2000) {
+    // 移除已存在的toast
+    const existingToast = document.querySelector('.toast-message');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
     const toast = document.createElement('div');
+    toast.className = 'toast-message';
     toast.style.cssText = `
         position: fixed;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.85);
         color: white;
         padding: 12px 24px;
         border-radius: 25px;
         z-index: 9999;
         font-size: 0.95rem;
         animation: slideDown 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     `;
     toast.textContent = message;
     
@@ -433,8 +467,6 @@ function showToast(message, duration = 2000) {
         setTimeout(() => toast.remove(), 300);
     }, duration);
 }
-
-
 
 // 键盘快捷键处理
 document.addEventListener('keydown', (e) => {
