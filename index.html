@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打字练习小游戏 - 拼音与五笔</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 打字练习小游戏</h1>
+            <p>提升你的打字速度与准确性</p>
+        </header>
+
+        <nav class="main-nav">
+            <button class="nav-btn active" data-section="home">🏠 首页</button>
+            <button class="nav-btn" data-section="wubi-tutorial">📖 五笔教程</button>
+            <button class="nav-btn" data-section="wubi-radicals">⌨️ 字根表</button>
+            <button class="nav-btn" data-section="practice">🎯 开始练习</button>
+            <button class="nav-btn" data-section="stats">📊 我的成绩</button>
+        </nav>
+
+        <main>
+            <!-- 首页 -->
+            <section id="home" class="section active">
+                <div class="welcome">
+                    <h2>欢迎来到打字练习世界！</h2>
+                    <div class="features">
+                        <div class="feature-card">
+                            <h3>🚀 拼音练习</h3>
+                            <p>从基础开始，逐步提升拼音打字速度</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>⌨️ 五笔练习</h3>
+                            <p>学习五笔字根，掌握高效打字方法</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>📚 智能学习</h3>
+                            <p>自动记录易错按键，针对性加强练习</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3>🏆 等级挑战</h3>
+                            <p>从初级到大师，挑战更高难度</p>
+                        </div>
+                    </div>
+                    <button class="start-btn" onclick="showSection('practice')">开始练习 →</button>
+                </div>
+            </section>
+
+            <!-- 五笔教程 -->
+            <section id="wubi-tutorial" class="section">
+                <div class="tutorial">
+                    <h2>📖 五笔输入法入门教程</h2>
+                    <div class="tutorial-content">
+                        <div class="tutorial-step">
+                            <h3>第一步：了解五笔字型</h3>
+                            <p>五笔字型是一种汉字输入法，将汉字拆分成基本字根，通过敲击对应按键来输入汉字。</p>
+                        </div>
+                        <div class="tutorial-step">
+                            <h3>第二步：认识字根</h3>
+                            <p>每个按键对应一组字根。例如：</p>
+                            <ul>
+                                <li><strong>G键</strong>：王旁青头戋五一</li>
+                                <li><strong>F键</strong>：土士二干十寸雨</li>
+                                <li><strong>H键</strong>：目具上止卜虎皮</li>
+                            </ul>
+                        </div>
+                        <div class="tutorial-step">
+                            <h3>第三步：拆分规则</h3>
+                            <p>汉字拆分遵循：书写顺序、取大优先、兼顾直观、能连不交、能散不连。</p>
+                        </div>
+                        <div class="tutorial-step">
+                            <h3>第四步：练习建议</h3>
+                            <p>从字根练习开始，熟悉每个按键对应的字根，然后练习单字，最后练习词组。</p>
+                        </div>
+                    </div>
+                    <button class="start-btn" onclick="showSection('wubi-radicals')">查看字根表 →</button>
+                </div>
+            </section>
+
+            <!-- 字根表 -->
+            <section id="wubi-radicals" class="section">
+                <div class="radicals-container">
+                    <h2>⌨️ 五笔字根表</h2>
+                    <div class="keyboard-layout">
+                        <!-- 第一行 -->
+                        <div class="keyboard-row">
+                            <div class="key key-q" data-key="q">
+                                <div class="key-label">Q</div>
+                                <div class="key-radicals">金勹儿夕</div>
+                                <div class="key-pinyin">jīn bāo ér xī</div>
+                            </div>
+                            <div class="key key-w" data-key="w">
+                                <div class="key-label">W</div>
+                                <div class="key-radicals">人八亻</div>
+                                <div class="key-pinyin">rén bā dān</div>
+                            </div>
+                            <div class="key key-e" data-key="e">
+                                <div class="key-label">E</div>
+                                <div class="key-radicals">月彡乃用</div>
+                                <div class="key-pinyin">yuè shān nǎi yòng</div>
+                            </div>
+                            <div class="key key-r" data-key="r">
+                                <div class="key-label">R</div>
+                                <div class="key-radicals">白手扌斤</div>
+                                <div class="key-pinyin">bái shǒu tí jīn</div>
+                            </div>
+                            <div class="key key-t" data-key="t">
+                                <div class="key-label">T</div>
+                                <div class="key-radicals">禾竹丿攵</div>
+                                <div class="key-pinyin">hé zhú piě wén</div>
+                            </div>
+                            <div class="key key-y" data-key="y">
+                                <div class="key-label">Y</div>
+                                <div class="key-radicals">言讠文方</div>
+                                <div class="key-pinyin">yán yán wén fāng</div>
+                            </div>
+                            <div class="key key-u" data-key="u">
+                                <div class="key-label">U</div>
+                                <div class="key-radicals">立六辛门</div>
+                                <div class="key-pinyin">lì liù xīn mén</div>
+                            </div>
+                            <div class="key key-i" data-key="i">
+                                <div class="key-label">I</div>
+                                <div class="key-radicals">水水氺小</div>
+                                <div class="key-pinyin">shuǐ shuǐ shuǐ xiǎo</div>
+                            </div>
+                            <div class="key key-o" data-key="o">
+                                <div class="key-label">O</div>
+                                <div class="key-radicals">火业灬米</div>
+                                <div class="key-pinyin">huǒ yè huǒ mǐ</div>
+                            </div>
+                            <div class="key key-p" data-key="p">
+                                <div class="key-label">P</div>
+                                <div class="key-radicals">之辶宀</div>
+                                <div class="key-pinyin">zhī zǒu bǎo</div>
+                            </div>
+                        </div>
+                        <!-- 第二行 -->
+                        <div class="keyboard-row">
+                            <div class="key key-a" data-key="a">
+                                <div class="key-label">A</div>
+                                <div class="key-radicals">工戈七艹</div>
+                                <div class="key-pinyin">gōng gē qī cǎo</div>
+                            </div>
+                            <div class="key key-s" data-key="s">
+                                <div class="key-label">S</div>
+                                <div class="key-radicals">木丁西</div>
+                                <div class="key-pinyin">mù dīng xī</div>
+                            </div>
+                            <div class="key key-d" data-key="d">
+                                <div class="key-label">D</div>
+                                <div class="key-radicals">大犬三古</div>
+                                <div class="key-pinyin">dà quǎn sān gǔ</div>
+                            </div>
+                            <div class="key key-f" data-key="f">
+                                <div class="key-label">F</div>
+                                <div class="key-radicals">土士二干</div>
+                                <div class="key-pinyin">tǔ shì èr gān</div>
+                            </div>
+                            <div class="key key-g" data-key="g">
+                                <div class="key-label">G</div>
+                                <div class="key-radicals">王一五戋</div>
+                                <div class="key-pinyin">wáng yī wǔ jiān</div>
+                            </div>
+                            <div class="key key-h" data-key="h">
+                                <div class="key-label">H</div>
+                                <div class="key-radicals">目上止卜</div>
+                                <div class="key-pinyin">mù shàng zhǐ bo</div>
+                            </div>
+                            <div class="key key-j" data-key="j">
+                                <div class="key-label">J</div>
+                                <div class="key-radicals">日早虫刂</div>
+                                <div class="key-pinyin">rì zǎo chóng lì</div>
+                            </div>
+                            <div class="key key-k" data-key="k">
+                                <div class="key-label">K</div>
+                                <div class="key-radicals">口川</div>
+                                <div class="key-pinyin">kǒu chuān</div>
+                            </div>
+                            <div class="key key-l" data-key="l">
+                                <div class="key-label">L</div>
+                                <div class="key-radicals">田甲力四</div>
+                                <div class="key-pinyin">tián jiǎ lì sì</div>
+                            </div>
+                        </div>
+                        <!-- 第三行 -->
+                        <div class="keyboard-row">
+                            <div class="key key-z" data-key="z">
+                                <div class="key-label">Z</div>
+                                <div class="key-radicals">学习键</div>
+                                <div class="key-pinyin">xué xí jiàn</div>
+                            </div>
+                            <div class="key key-x" data-key="x">
+                                <div class="key-label">X</div>
+                                <div class="key-radicals">纟弓匕母</div>
+                                <div class="key-pinyin">sī gōng bǐ mǔ</div>
+                            </div>
+                            <div class="key key-c" data-key="c">
+                                <div class="key-label">C</div>
+                                <div class="key-radicals">又巴马厶</div>
+                                <div class="key-pinyin">yòu bā mǎ sī</div>
+                            </div>
+                            <div class="key key-v" data-key="v">
+                                <div class="key-label">V</div>
+                                <div class="key-radicals">女刀九臼</div>
+                                <div class="key-pinyin">nǚ dāo jiǔ jiù</div>
+                            </div>
+                            <div class="key key-b" data-key="b">
+                                <div class="key-label">B</div>
+                                <div class="key-radicals">子耳了也</div>
+                                <div class="key-pinyin">zǐ ěr le yě</div>
+                            </div>
+                            <div class="key key-n" data-key="n">
+                                <div class="key-label">N</div>
+                                <div class="key-radicals">已己巳心</div>
+                                <div class="key-pinyin">yǐ jǐ sì xīn</div>
+                            </div>
+                            <div class="key key-m" data-key="m">
+                                <div class="key-label">M</div>
+                                <div class="key-radicals">山由贝几</div>
+                                <div class="key-pinyin">shān yóu bèi jǐ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 练习页面 -->
+            <section id="practice" class="section">
+                <div class="practice-container">
+                    <h2>🎯 开始练习</h2>
+                    
+                    <!-- 练习设置 -->
+                    <div class="practice-settings">
+                        <div class="setting-group">
+                            <label>练习类型：</label>
+                            <select id="practice-type">
+                                <option value="pinyin">拼音练习</option>
+                                <option value="wubi">五笔练习</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label>难度等级：</label>
+                            <select id="difficulty-level">
+                                <option value="1">初级 (60秒/90%准确率)</option>
+                                <option value="2">中级 (45秒/95%准确率)</option>
+                                <option value="3">高级 (30秒/98%准确率)</option>
+                                <option value="4">专家 (20秒/99%准确率)</option>
+                                <option value="5">大师 (15秒/100%准确率)</option>
+                            </select>
+                        </div>
+                        <button class="start-game-btn" onclick="startGame()">开始游戏</button>
+                    </div>
+
+                    <!-- 游戏面板 -->
+                    <div class="game-panel" id="game-panel" style="display: none;">
+                        <div class="game-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">⏱️ 时间</span>
+                                <span class="stat-value" id="timer">60</span>
+                                <span class="stat-unit">秒</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">🏆 分数</span>
+                                <span class="stat-value" id="score">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">✅ 正确</span>
+                                <span class="stat-value" id="correct-count">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">❌ 错误</span>
+                                <span class="stat-value" id="wrong-count">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">📊 准确率</span>
+                                <span class="stat-value" id="accuracy">100%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">⚡ 速度</span>
+                                <span class="stat-value" id="speed">0</span>
+                                <span class="stat-unit">字/分钟</span>
+                            </div>
+                        </div>
+
+                        <div class="target-display">
+                            <div class="target-hint" id="target-hint">请输入以下字符：</div>
+                            <div class="target-text" id="target-text">准备开始</div>
+                            <div class="input-display" id="input-display"></div>
+                        </div>
+
+                        <div class="virtual-keyboard" id="virtual-keyboard">
+                            <!-- 虚拟键盘将由JS生成 -->
+                        </div>
+
+                        <div class="game-controls">
+                            <button class="pause-btn" onclick="togglePause()" id="pause-btn">⏸️ 暂停</button>
+                            <button class="restart-btn" onclick="restartGame()">🔄 重新开始</button>
+                            <button class="quit-btn" onclick="quitGame()">🚪 退出</button>
+                        </div>
+                    </div>
+
+                    <!-- 游戏结束面板 -->
+                    <div class="result-panel" id="result-panel" style="display: none;">
+                        <h2 id="result-title">🎉 练习完成！</h2>
+                        <div class="result-stats">
+                            <div class="result-item">
+                                <span class="result-label">最终分数</span>
+                                <span class="result-value" id="final-score">0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">打字速度</span>
+                                <span class="result-value" id="final-speed">0 字/分钟</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">准确率</span>
+                                <span class="result-value" id="final-accuracy">0%</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">正确数</span>
+                                <span class="result-value" id="final-correct">0</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">错误数</span>
+                                <span class="result-value" id="final-wrong">0</span>
+                            </div>
+                        </div>
+                        <div class="result-message" id="result-message">继续努力！</div>
+                        <div class="result-actions">
+                            <button class="retry-btn" onclick="restartGame()">🔄 再来一次</button>
+                            <button class="back-btn" onclick="quitGame()">🏠 返回主页</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 统计页面 -->
+            <section id="stats" class="section">
+                <div class="stats-container">
+                    <h2>📊 我的成绩</h2>
+                    <div class="stats-summary">
+                        <div class="summary-card">
+                            <h3>🏆 最高分</h3>
+                            <div class="summary-value" id="best-score">0</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>⚡ 最快速度</h3>
+                            <div class="summary-value" id="best-speed">0</div>
+                            <div class="summary-unit">字/分钟</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>✅ 最高准确率</h3>
+                            <div class="summary-value" id="best-accuracy">0%</div>
+                        </div>
+                        <div class="summary-card">
+                            <h3>🎮 总练习次数</h3>
+                            <div class="summary-value" id="total-practices">0</div>
+                        </div>
+                    </div>
+                    <div class="error-analysis">
+                        <h3>📝 易错按键分析</h3>
+                        <div class="error-list" id="error-list">
+                            <p>暂无易错记录</p>
+                        </div>
+                    </div>
+                    <div class="history-records">
+                        <h3>📋 历史记录</h3>
+                        <div class="history-list" id="history-list">
+                            <p>暂无练习记录</p>
+                        </div>
+                    </div>
+                    <button class="clear-stats-btn" onclick="clearStats()">🗑️ 清除所有记录</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2026 打字练习小游戏 - 让学习更有趣</p>
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/keyboard.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
